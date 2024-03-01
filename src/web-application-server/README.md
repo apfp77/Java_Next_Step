@@ -77,4 +77,46 @@
 </details>
 </details>
 
+## 4장은 3장의 풀이과정으로 생략합니다
+
+## 5장 HTTP 웹 서버 리팩토링 실습
+<details> <summary><b>요구사항</b></summary>
+
+### 요구사항 1 - 요청 데이터를 처리하는 로직을 별도의 클래스로 분리한다(HttpRequest)
+<details> <summary><b>Hint</b></summary>
+
+* 클라이언트 요청 데이터를 담는 InputStream을 생성자로 받아 HTTP 메소드, URL, 헤더, 본문을 분리하는 작업을 한다
+* 헤더는 Map<String, String>에 저장하여 관리한다
+* getHeader("필드 이름") 메소드를 통해 접근 가능하도록 구현한다
+* GET과 POST 메소드에 따라 전달되는 인자를 Map<String, String>에 저장하여 관리한다
+* getParameter("인자 이름") 메소드를 통해 접근 가능하도록 구현한다
+</details>
+
+### 요구사항 2 - 응답 데이터를 처리하는 로직을 별도의 클래스로 분리한다(HttpResponse)
+<details> <summary><b>Hint</b></summary>
+
+* 중복된 코드를 제거해본다
+* 응답 헤더를 Map<String, String>으로 관리한다
+* 파일을 직접 읽어 응답으로 보내는 메소드는 forward로 지정한다
+* 다른 URL로 리다이렉트하는 메소드는 sendRedirect로 지정한다
+</details>
+
+### 요구사항 3 - 다형성을 활용해 클라이언트 요청 URL에 대한 분기 처리를 제거한다
+<details> <summary><b>Hint</b></summary>
+
+* 각 URL에 대해 분기를 if/else이 아닌 자바의 다형성을 활용한다
+* 각 요청과 응답에 대한 처리를 담당하는 부분을 추상화해 인터페이스로 만든다
+    ```java
+    public interface Controller{
+        void service(HttpRequest request, HttpResponse response);
+    }
+    ```
+* 각 분기문을 Controller 인터페이스를 구현하는 클래스를 만들어 분리한다
+* 위에서 구현한 Controller를 Map<String, Controller>에 저장하여 관리한다
+  * key: URL, value: Controller 구현체
+* 클라이언트 요청 URL에 해당하는 Controller를 찾아 service()메소드를 호출한다
+* Controller 인터페이스를 구현하는 AbstractController 추상클래스를 추가해 중복을 제거한다
+* service 메소드에서 GET과 POST HTTP 메소드에 따라 doGet, doPost 메소드를 호출한다
+</details>
+</details>
 
