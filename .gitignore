@@ -2,6 +2,9 @@
 .vscode
 .idea
 lib
-test*
 out
 *.iml
+.project
+target
+.classpath
+bin
