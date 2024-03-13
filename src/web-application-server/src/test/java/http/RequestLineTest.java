@@ -12,7 +12,7 @@ public class RequestLineTest {
         assertEquals(HttpMethod.GET, line.getMethod());
         assertEquals("/index.html", line.getPath());
     }
-    
+
     @Test
     public void create_method_post() {
         RequestLine line = new RequestLine("POST /index.html HTTP/1.1");
@@ -25,5 +25,10 @@ public class RequestLineTest {
         assertEquals(HttpMethod.GET, line.getMethod());
         assertEquals("/user/create", line.getPath());
         assertEquals("userId=javajigi&password=pass", line.getQueryString());
+    }
+    @Test
+    public void create_version() {
+        RequestLine line = new RequestLine("GET /user/create?userId=javajigi&password=pass HTTP/1.1");
+        assertEquals("HTTP/1.1", line.getVersion());
     }
 }
